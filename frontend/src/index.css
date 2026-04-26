@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-greenshield-dark: #071710;
+  --color-greenshield-panel: #0d2116;
+  --color-greenshield-border: #183824;
+  --color-greenshield-neon: #00ff66;
+  --color-greenshield-neon-hover: #00cc52;
+}
+
+body {
+  background-color: var(--color-greenshield-dark);
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-greenshield-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-greenshield-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2d5a3c;
+}
