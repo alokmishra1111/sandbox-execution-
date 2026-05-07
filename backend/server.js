@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan('dev'))
 
 // Rate limiting: 20 requests per minute per IP
 const limiter = rateLimit({
@@ -22,7 +22,12 @@ const limiter = rateLimit({
 });
 app.use('/api/run', limiter);
 
+const { registerUser, loginUser } = require('./auth');
+
 // Execution endpoint
+app.post('/api/auth/register', registerUser);
+app.post('/api/auth/login', loginUser);
+
 app.post('/api/run', async (req, res) => {
   const { code, language } = req.body;
 
@@ -30,7 +35,7 @@ app.post('/api/run', async (req, res) => {
     return res.status(400).json({ success: false, error: 'Code and language are required.' });
   }
 
-  const supportedLanguages = ['c', 'python', 'javascript'];
+  const supportedLanguages = ['c', 'python', 'javascript', 'cpp', 'mysql', 'html'];
   if (!supportedLanguages.includes(language.toLowerCase())) {
     return res.status(400).json({ success: false, error: 'Unsupported language.' });
   }

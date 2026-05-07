@@ -1,18 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-greenshield-dark: #071710;
-  --color-greenshield-panel: #0d2116;
-  --color-greenshield-border: #183824;
-  --color-greenshield-neon: #00ff66;
-  --color-greenshield-neon-hover: #00cc52;
+  --color-greenshield-dark: var(--bg-dark);
+  --color-greenshield-panel: var(--bg-panel);
+  --color-greenshield-border: var(--bg-border);
+  --color-greenshield-neon: var(--color-neon);
+  --color-greenshield-neon-hover: var(--color-neon-hover);
+}
+
+:root {
+  /* Light mode defaults */
+  --bg-dark: #f8fafc;
+  --bg-panel: #ffffff;
+  --bg-border: #e2e8f0;
+  --color-neon: #16a34a;
+  --color-neon-hover: #15803d;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+}
+
+.dark {
+  /* Dark mode */
+  --bg-dark: #071710;
+  --bg-panel: #0d2116;
+  --bg-border: #183824;
+  --color-neon: #00ff66;
+  --color-neon-hover: #00cc52;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-inverse: #071710;
 }
 
 body {
   background-color: var(--color-greenshield-dark);
-  color: #e2e8f0;
+  color: var(--text-main);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom scrollbar */
@@ -28,5 +53,102 @@ body {
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2d5a3c;
+  background: var(--color-greenshield-neon-hover);
+}
+
+/* ConsoleOutput Component Styles */
+.console-container {
+  @apply h-full flex flex-col font-mono text-sm;
+}
+
+.status-bar {
+  @apply px-4 py-2 text-xs font-bold uppercase tracking-widest border-b border-t-0 flex items-center;
+}
+
+.status-success {
+  @apply text-greenshield-neon border-greenshield-neon bg-greenshield-neon/10;
+}
+
+.status-error {
+  @apply text-red-400 border-red-500/50 bg-red-500/10;
+}
+
+.status-timeout {
+  @apply text-yellow-400 border-yellow-500/50 bg-yellow-500/10;
+}
+
+.status-running {
+  @apply text-blue-400 border-blue-500/50 bg-blue-500/10;
+}
+
+.status-default {
+  @apply text-[var(--text-muted)] border-[var(--bg-border)] bg-[var(--bg-dark)];
+}
+
+.status-indicator-container {
+  @apply relative flex h-2 w-2 mr-2;
+}
+
+.status-indicator-ping {
+  @apply animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75;
+}
+
+.status-indicator {
+  @apply relative inline-flex rounded-full h-2 w-2;
+}
+
+.bg-success {
+  @apply bg-greenshield-neon;
+}
+
+.bg-error {
+  @apply bg-red-500;
+}
+
+.bg-timeout {
+  @apply bg-yellow-500;
+}
+
+.bg-running {
+  @apply bg-blue-500;
+}
+
+.bg-default {
+  @apply bg-slate-500;
+}
+
+.output-area {
+  @apply flex-1 overflow-auto p-4 space-y-4;
+}
+
+.output-placeholder {
+  @apply text-[var(--text-muted)] italic;
+}
+
+.html-preview-container {
+  @apply flex-1 flex flex-col min-h-[400px];
+}
+
+.output-label {
+  @apply text-[var(--text-muted)] text-xs mb-2 uppercase;
+}
+
+.html-preview-iframe {
+  @apply w-full flex-1 border border-greenshield-border rounded bg-white;
+}
+
+.standard-output {
+  @apply text-[var(--text-main)] whitespace-pre-wrap break-all;
+}
+
+.error-container {
+  @apply mt-4;
+}
+
+.error-label {
+  @apply text-red-400/70 text-xs mb-1 uppercase;
+}
+
+.standard-error {
+  @apply text-red-400 whitespace-pre-wrap break-all bg-red-500/5 p-3 rounded border border-red-500/20;
 }

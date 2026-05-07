@@ -16,7 +16,10 @@ if (!fsSync.existsSync(TEMP_DIR)) {
 const BLOCKLIST = {
   python: ['import os', 'import subprocess', 'import sys', 'open(', 'eval(', 'exec('],
   javascript: ['require("child_process")', 'require("fs")', 'process.exit', 'eval('],
-  c: ['system(', 'exec', 'fork(', 'fopen(']
+  c: ['system(', 'exec', 'fork(', 'fopen('],
+  cpp: ['system(', 'exec', 'fork(', 'fopen('],
+  mysql: [],
+  html: []
 };
 
 const checkBlocklist = (code, language) => {
@@ -53,14 +56,23 @@ const executeCode = async (code, language) => {
       await fs.writeFile(filePath, code);
       command = 'node';
       args = [filePath];
-    } else if (language === 'c') {
-      filePath = path.join(TEMP_DIR, `${fileId}.c`);
+    } else if (language === 'html') {
+      return { success: true, output: code, error: '', status: 'Success' };
+    } else if (language === 'mysql') {
+      filePath = path.join(TEMP_DIR, `${fileId}.sql`);
+      await fs.writeFile(filePath, code);
+      command = 'sqlite3';
+      args = [':memory:', `.read ${filePath}`];
+    } else if (language === 'c' || language === 'cpp') {
+      const ext = language === 'c' ? 'c' : 'cpp';
+      const compiler = language === 'c' ? 'gcc' : 'g++';
+      filePath = path.join(TEMP_DIR, `${fileId}.${ext}`);
       executablePath = path.join(TEMP_DIR, `${fileId}.out`);
       await fs.writeFile(filePath, code);
       
-      // Compile C code first
+      // Compile code first
       await new Promise((resolve, reject) => {
-        exec(`gcc "${filePath}" -o "${executablePath}"`, (error, stdout, stderr) => {
+        exec(`${compiler} "${filePath}" -o "${executablePath}"`, (error, stdout, stderr) => {
           if (error) {
             reject(`Compilation Error:\n${stderr}`);
           } else {

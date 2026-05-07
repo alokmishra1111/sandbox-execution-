@@ -1,7 +1,7 @@
 import React from 'react';
 import Editor from '@monaco-editor/react';
 
-function EditorPane({ code, onChange, language }) {
+function EditorPane({ code, onChange, language, theme }) {
   const handleEditorChange = (value) => {
     if (value !== undefined) {
       onChange(value);
@@ -12,7 +12,7 @@ function EditorPane({ code, onChange, language }) {
     <Editor
       height="100%"
       language={language}
-      theme="vs-dark"
+      theme={theme === 'dark' ? 'vs-dark' : 'light'}
       value={code}
       onChange={handleEditorChange}
       options={{
